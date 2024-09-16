@@ -1,0 +1,17 @@
+{
+    "scripts": {
+        "dev": "nodemon server.js",
+        "start": "node server.js",
+        "start:clear": "nodemon --exec 'clear && node app.js'"
+    },
+    "name": "taskmanager",
+    "version": "1.0.0",
+    "main": "server.js",
+    "keywords": [],
+    "author": "Cierra Ray",
+    "license": "ISC",
+    "description": "Assignment 2",
+    "dependencies": {
+        "validator": "^13.12.0"
+    }
+}
