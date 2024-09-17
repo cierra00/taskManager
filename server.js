@@ -26,8 +26,7 @@ const getAllTasks = async () => {
 
 const addTask = async (id, title, description, status="not completed") => {
     try {
-        // Read the current tasks from the file
-        const data = await fs.promises.readFile(tasksJson, 'utf8');
+        const data = await fs.readFile(tasksJson, 'utf8');
         const tasks = JSON.parse(data);
         
         // Create a new task object
@@ -42,7 +41,7 @@ const addTask = async (id, title, description, status="not completed") => {
         tasks.push(newTask);
         
         // Write the updated tasks array back to the file
-        await fs.promises.writeFile(tasksJson, JSON.stringify(tasks, null, 2), 'utf8');
+        await fs.writeFile(tasksJson, JSON.stringify(tasks, null, 2), 'utf8');
         
         console.log('Task added successfully!');
     } catch (error) {
@@ -52,11 +51,25 @@ const addTask = async (id, title, description, status="not completed") => {
 
 const taskUserInput = async()=>{    
       const question = promisify(rl.question).bind(rl);
+      try{
       const id = await question('Enter Task Id');
       const title = await question('Enter task title: ');
       const description = await question('Enter task description: ');
-      await addTask(id, title, description);
+      if(id && title && description){
+        await addTask(id, title, description);
+      } else {
+        console.log('Values Cannot Be Null')
+        setTimeout(() => {
+            taskUserInput();
+        }, 2000);
+        
+      }
+
+      } catch(error){
+        console.error("Error entering task");
+      }
 }
+
 
 
 const completeTask = async (id) => {
@@ -79,6 +92,17 @@ const completeTask = async (id) => {
         console.error('Error updating task status:', error);
     }
 };
+const completeUserInput = async()=>{    
+    const question = promisify(rl.question).bind(rl);
+    try{
+    const id = await question('Enter The Task Id of the Task You Wish to Mark Complete: ');    
+    console.log(`The ID is : ${id}, and type is ${typeof(id)}` );
+    await completeTask(parseInt(id));
+    } catch(error){
+      console.error("Error entering task");
+    }
+}
+
 
 
 
@@ -96,7 +120,8 @@ const handleSelection = (selection)=>{
             taskUserInput();
             break;
         case '3':
-            completeTask(1);
+            completeUserInput();
+            // completeTask(2);
             break;
         
     }
