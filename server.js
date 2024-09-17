@@ -97,7 +97,7 @@ const completeUserInput = async()=>{
     try{
     const id = await question('Enter The Task Id of the Task You Wish to Mark Complete: ');    
     console.log(`The ID is : ${id}, and type is ${typeof(id)}` );
-    await completeTask(parseInt(id));
+    await completeTask(id);
     } catch(error){
       console.error("Error entering task");
     }
